@@ -16,7 +16,7 @@ except ImportError:
         "https://github.com/1adrianb/face-alignment")
 
 def load_landmark_detector():
-    return face_alignment.FaceAlignment(face_alignment.LandmarksType._3D, flip_input=False)
+    return face_alignment.FaceAlignment(face_alignment.LandmarksType.THREE_D, flip_input=False)
 
 def load_face_detector():
     return FaceDetector(device='cuda')
@@ -601,7 +601,7 @@ class VideoWriter(ImageWriter):
         if fourcc is None:
             default_codecs = {
                 '.avi': 'MJPG',
-                '.mp4': 'avc1',
+                '.mp4': 'mp4v',
             }
             fourcc = default_codecs.get(self.path[-4:], 'XVID')
         self.fourcc = cv2.VideoWriter_fourcc(*fourcc)
@@ -615,6 +615,9 @@ class VideoWriter(ImageWriter):
                 self.path, self.fourcc, self.fps, image.shape[1::-1])
             assert self.video_writer.isOpened(), "Couldn't initialize video writer"
 
+        image = image - image.min()
+        image = image / image.max() * 255
+        image = np.uint8(image)
         self.video_writer.write(image)
 
 class SingleImageWriter(ImageWriter):

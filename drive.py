@@ -89,10 +89,10 @@ if __name__ == '__main__':
 
             def torch_to_opencv(image):
                 image = image.permute(1,2,0).clamp_(0, 1).mul_(255).cpu().byte().numpy()
-                return cv2.cvtColor(image, cv2.COLOR_RGB2BGR, dst=image)
+                return cv2.cvtColor(image, cv2.COLOR_RGB2BGR, dst=cv2.UMat(image))
 
-            result = torch_to_opencv(data_dict['fake_rgbs'][0])
-            pose_driver = torch_to_opencv(data_dict['pose_input_rgbs'][0, 0])
+            result = torch_to_opencv(data_dict['fake_rgbs'][0]).get().astype('f')
+            pose_driver = torch_to_opencv(data_dict['pose_input_rgbs'][0, 0]).get().astype('f')
 
             frame_grid = np.concatenate((pose_driver, result), axis=1)
             image_writer.add(frame_grid)

@@ -1,7 +1,11 @@
 .idea
 configs/
 experiments/
+outputs/
 *.pth
+*.jpg
+*.png
+*.mp4
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
